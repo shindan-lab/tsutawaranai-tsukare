@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>伝わらない疲れ診断</title>
+  <meta name="description" content="20の質問で、ちゃんとしんどいのにうまく伝わらない理由や、その伝わらなさの癖がわかる読み物型診断ツールです。所要時間約3分。">
+  <link rel="canonical" href="https://shindan-lab.github.io/tsutawaranai-tsukare/">
+  <link rel="icon" href="favicon.png">
+  <meta name="theme-color" content="#C1714A">
+  <meta property="og:title" content="伝わらない疲れ診断｜『ちゃんとしんどいのに、うまく伝わらない』が少し見えてきます。">
+  <meta property="og:description" content="20の質問で、疲れがうまく伝わりにくい理由や、その伝わらなさの癖がわかる読み物型診断ツールです。所要時間約3分。">
+  <meta property="og:url" content="https://shindan-lab.github.io/tsutawaranai-tsukare/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:site_name" content="伝わらない疲れ診断">
+  <meta property="og:image" content="https://shindan-lab.github.io/tsutawaranai-tsukare/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="伝わらない疲れ診断｜『ちゃんとしんどいのに、うまく伝わらない』が少し見えてきます。">
+  <meta name="twitter:description" content="20の質問で、疲れがうまく伝わりにくい理由や、その伝わらなさの癖がわかる読み物型診断ツールです。">
+  <meta name="twitter:image" content="https://shindan-lab.github.io/tsutawaranai-tsukare/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+      background-color: #FAF7F4;
+      color: #3D2B1F;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      padding: 24px 16px;
+      padding-bottom: max(48px, calc(24px + env(safe-area-inset-bottom, 0px)));
+      min-height: 100vh;
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    #screen-top {
+      text-align: center;
+      padding-top: 48px;
+    }
+
+    .top-logo {
+      font-size: 12px;
+      color: #C1714A;
+      letter-spacing: 0.18em;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .top-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #3D2B1F;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .top-subtitle {
+      font-size: 17px;
+      color: #C1714A;
+      font-weight: 500;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .top-desc-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      border: 1px solid #E8D5CE;
+      padding: 24px 20px;
+      box-shadow: 0 2px 12px rgba(193,113,74,0.08);
+      margin-bottom: 32px;
+      text-align: left;
+    }
+
+    .top-desc {
+      font-size: 15px;
+      color: #7A5C52;
+      line-height: 1.8;
+    }
+
+    .top-desc .time-badge {
+      display: inline-block;
+      background: #FDF0EB;
+      border: 1px solid #E8D5CE;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 13px;
+      color: #C1714A;
+      font-weight: 500;
+      margin-top: 12px;
+    }
+
+    .btn-start {
+      display: block;
+      width: 100%;
+      padding: 18px 16px;
+      background: #C1714A;
+      border: none;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 700;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #FFFFFF;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.05em;
+      min-height: 44px;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .btn-start:hover {
+      background: #A85D38;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(193,113,74,0.3);
+    }
+
+    #screen-quiz { padding-top: 20px; }
+
+    .progress-header { margin-bottom: 12px; }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .progress-num {
+      font-size: 13px;
+      color: #7A5C52;
+      font-weight: 500;
+    }
+
+    .progress-bar-wrap {
+      height: 4px;
+      background: #E8D5CE;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: #C1714A;
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-nav {
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .btn-back {
+      background: none;
+      border: none;
+      color: #7A5C52;
+      font-size: 13px;
+      font-family: 'Noto Sans JP', sans-serif;
+      cursor: pointer;
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      opacity: 0.75;
+      transition: opacity 0.2s, color 0.2s;
+      min-height: 44px;
+    }
+
+    .btn-back:hover:not(:disabled) {
+      opacity: 1;
+      color: #C1714A;
+    }
+
+    .btn-back:disabled {
+      opacity: 0.2;
+      cursor: default;
+    }
+
+    .btn-back svg { flex-shrink: 0; }
+
+    .question-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      border: 1px solid #E8D5CE;
+      padding: 28px 24px;
+      box-shadow: 0 2px 12px rgba(193,113,74,0.08);
+    }
+
+    .question-text {
+      font-size: 17px;
+      font-weight: 700;
+      color: #3D2B1F;
+      line-height: 1.65;
+      margin-bottom: 24px;
+    }
+
+    .options-list { list-style: none; }
+
+    .option-btn {
+      display: block;
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      background: #FAF7F4;
+      border: 1.5px solid #E8D5CE;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #3D2B1F;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+      line-height: 1.5;
+      min-height: 44px;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .option-btn:last-child { margin-bottom: 0; }
+
+    .option-btn:hover:not(:disabled) {
+      background: #FDF0EB;
+      border-color: #C1714A;
+    }
+
+    .option-btn.selected {
+      background: #FDF0EB;
+      border-color: #C1714A;
+      color: #C1714A;
+      font-weight: 500;
+    }
+
+    .option-btn:disabled { cursor: default; }
+
+    #screen-loading {
+      display: none;
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    #screen-loading.active { display: block; }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #E8D5CE;
+      border-top-color: #C1714A;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin: 0 auto 24px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text {
+      font-size: 16px;
+      color: #7A5C52;
+      font-weight: 500;
+    }
+
+    #screen-result {
+      padding-top: 20px;
+      padding-bottom: 48px;
+    }
+
+    .result-header-card {
+      border-radius: 20px;
+      padding: 36px 24px 32px;
+      text-align: center;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+      color: #FFFFFF;
+    }
+
+    .result-header-bg-letter {
+      position: absolute;
+      font-size: 200px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.1);
+      top: -40px;
+      right: -16px;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .result-header-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .result-header-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 8px;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
+    .result-type-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.3;
+      position: relative;
+      z-index: 1;
+    }
+
+    .result-section {
+      background: #FFFFFF;
+      border-radius: 16px;
+      border: 1px solid #E8D5CE;
+      padding: 22px 20px;
+      box-shadow: 0 2px 12px rgba(193,113,74,0.08);
+      margin-bottom: 14px;
+    }
+
+    .result-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #C1714A;
+      letter-spacing: 0.15em;
+      margin-bottom: 12px;
+    }
+
+    .result-headline {
+      font-size: 14px;
+      font-weight: 700;
+      color: #3D2B1F;
+      line-height: 1.7;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #F0E4DE;
+    }
+
+    .result-body {
+      font-size: 14px;
+      color: #3D2B1F;
+      line-height: 1.9;
+    }
+
+    .result-body p + p { margin-top: 14px; }
+
+    .result-letter-section {
+      background: #FDF0EB;
+      border: 1px solid #E8D5CE;
+      border-radius: 16px;
+      padding: 22px 20px;
+      margin-bottom: 14px;
+    }
+
+    .result-letter-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #C1714A;
+      letter-spacing: 0.15em;
+      margin-bottom: 12px;
+    }
+
+    .result-letter {
+      font-size: 14px;
+      color: #3D2B1F;
+      line-height: 1.9;
+    }
+
+    .result-prescription-section {
+      background: #FFFFFF;
+      border-radius: 16px;
+      border: 2px solid #C1714A;
+      padding: 22px 20px;
+      margin-bottom: 14px;
+    }
+
+    .result-prescription-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #C1714A;
+      letter-spacing: 0.15em;
+      margin-bottom: 12px;
+    }
+
+    .result-prescription {
+      font-size: 14px;
+      color: #3D2B1F;
+      line-height: 1.9;
+      font-weight: 500;
+    }
+
+    .result-sub-type {
+      font-size: 13px;
+      color: #7A5C52;
+      text-align: center;
+      margin-bottom: 24px;
+      padding: 10px 16px;
+      background: #FFFFFF;
+      border: 1px solid #E8D5CE;
+      border-radius: 10px;
+    }
+
+    .share-section { text-align: center; }
+
+    .share-label {
+      font-size: 13px;
+      color: #7A5C52;
+      margin-bottom: 14px;
+    }
+
+    .share-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .btn-share {
+      flex: 1;
+      max-width: 180px;
+      padding: 13px 10px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 44px;
+      background: #1A1A1A;
+      color: #FFFFFF;
+    }
+
+    .btn-share:hover { background: #333; }
+
+    .btn-retry {
+      display: block;
+      width: 100%;
+      padding: 15px 16px;
+      margin-top: 12px;
+      background: transparent;
+      border: 1.5px solid #E8D5CE;
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #7A5C52;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 44px;
+    }
+
+    .btn-retry:hover {
+      border-color: #C1714A;
+      color: #C1714A;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in { animation: fadeInUp 0.3s ease forwards; }
+
+    @media (max-width: 375px) {
+      .top-title { font-size: 28px; }
+      .question-card { padding: 22px 18px; }
+    }
+
+    .site-footer {
+      margin-top: 56px;
+      padding: 28px 0 20px;
+      text-align: center;
+      border-top: 1px solid #E8D5CE;
+    }
+
+    .footer-logo-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      text-decoration: none;
+    }
+
+    .footer-brand-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: #3D2B1F;
+      letter-spacing: 0.04em;
+    }
+
+    .footer-brand-name em {
+      font-style: normal;
+      color: #C1714A;
+    }
+
+    .footer-tagline {
+      font-size: 12px;
+      color: #7A5C52;
+      margin-bottom: 14px;
+      letter-spacing: 0.03em;
+    }
+
+    .footer-copy {
+      font-size: 11px;
+      color: #B0978E;
+    }
+
+    .result-affiliate-section {
+      background: #FFFFFF;
+      border-radius: 16px;
+      border: 1px solid #E8D5CE;
+      padding: 18px 20px;
+      box-shadow: 0 2px 12px rgba(193,113,74,0.08);
+      margin-bottom: 14px;
+    }
+
+    .affiliate-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .affiliate-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #7A5C52;
+      letter-spacing: 0.15em;
+    }
+
+    .affiliate-pr-badge {
+      font-size: 9px;
+      font-weight: 700;
+      color: #B0978E;
+      background: #F0E4DE;
+      padding: 2px 6px;
+      border-radius: 3px;
+      letter-spacing: 0.05em;
+    }
+
+    .affiliate-card-link {
+      display: block;
+      background: #FAF7F4;
+      border-radius: 10px;
+      padding: 14px 16px;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .affiliate-card-link:hover {
+      background: #FDF0EB;
+      border-color: #E8D5CE;
+    }
+
+    .affiliate-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #3D2B1F;
+      margin-bottom: 5px;
+      line-height: 1.5;
+    }
+
+    .affiliate-card-desc {
+      font-size: 13px;
+      color: #7A5C52;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    .affiliate-card-cta {
+      font-size: 12px;
+      font-weight: 700;
+      color: #BF4500;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- トップ画面 -->
+  <div id="screen-top" class="screen active">
+    <div class="top-logo">診断ツール</div>
+    <h1 class="top-title">伝わらない疲れ診断</h1>
+    <p class="top-subtitle">「ちゃんとしんどいのに、<br>うまく伝わらない」が少し見えてきます。</p>
+
+    <div class="top-desc-card">
+      <p class="top-desc">
+        20の質問に答えるだけで、<br>
+        あなたの疲れがうまく伝わりにくい理由や、<br>
+        その"伝わらなさの癖"がわかります。
+      </p>
+      <span class="time-badge">所要時間：約3分</span>
+    </div>
+
+    <button class="btn-start" onclick="startQuiz()">診断をはじめる</button>
+  </div>
+
+  <!-- 診断画面 -->
+  <div id="screen-quiz" class="screen">
+    <div class="progress-header">
+      <div class="progress-label">
+        <span class="progress-num" id="progress-text">1 / 20</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-bar" style="width:5%"></div>
+      </div>
+    </div>
+
+    <div class="quiz-nav">
+      <button class="btn-back" id="btn-back" onclick="goBack()" disabled>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+        前の問題に戻る
+      </button>
+    </div>
+
+    <div class="question-card fade-in" id="question-card">
+      <p class="question-text" id="question-text"></p>
+      <ul class="options-list" id="options-list"></ul>
+    </div>
+  </div>
+
+  <!-- 集計中画面 -->
+  <div id="screen-loading" class="screen">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">あなたの"伝わらない疲れ"を分析中…</p>
+  </div>
+
+  <!-- 結果画面 -->
+  <div id="screen-result" class="screen">
+    <div class="result-header-card" id="result-header-card">
+      <div class="result-header-bg-letter" id="result-bg-letter"></div>
+      <div class="result-header-icon" id="result-icon"></div>
+      <div class="result-header-eyebrow">あなたの伝わらない疲れタイプ</div>
+      <h2 class="result-type-name" id="result-type-name"></h2>
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-label">診断結果</div>
+      <p class="result-headline" id="result-headline"></p>
+      <div class="result-body" id="result-body"></div>
+    </div>
+
+    <div class="result-letter-section">
+      <div class="result-letter-label">あなたへ</div>
+      <div class="result-letter" id="result-letter"></div>
+    </div>
+
+    <div class="result-prescription-section">
+      <div class="result-prescription-label">伝わりやすくするヒント</div>
+      <div class="result-prescription" id="result-prescription"></div>
+    </div>
+
+    <!-- アフィリエイト -->
+    <div class="result-affiliate-section" id="result-affiliate" style="display:none">
+      <div class="affiliate-header">
+        <span class="affiliate-section-label">もし気になったら</span>
+        <span class="affiliate-pr-badge">PR</span>
+      </div>
+      <a class="affiliate-card-link" id="affiliate-link" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="affiliate-card-title" id="affiliate-title"></div>
+        <div class="affiliate-card-desc" id="affiliate-desc"></div>
+        <div class="affiliate-card-cta">楽天で見る →</div>
+      </a>
+    </div>
+
+    <div class="result-sub-type" id="result-sub-type"></div>
+
+    <div class="share-section">
+      <p class="share-label">結果をシェアする</p>
+      <div class="share-buttons">
+        <a id="share-x" href="#" target="_blank" rel="noopener noreferrer" class="btn-share">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.73-8.835L1.254 2.25H8.08l4.261 5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Xでシェア
+        </a>
+        <a id="share-threads" href="#" target="_blank" rel="noopener noreferrer" class="btn-share">
+          <svg width="15" height="15" viewBox="0 0 192 192" fill="currentColor"><path d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.232c8.248.053 14.474 2.452 18.502 7.13 2.932 3.405 4.893 8.11 5.864 14.05-7.314-1.244-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.453-15.153 9.899-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.318-11.319 11.247-24.938 16.12-45.433 16.267-22.747-.168-39.897-7.487-51-21.754C35.5 139.982 29.977 120.682 29.8 96c.177-24.682 5.7-43.982 16.457-57.371 11.103-14.267 28.253-21.586 51-21.754 22.887.169 40.376 7.52 51.99 21.842 5.689 7.01 9.951 15.93 12.66 26.516l16.338-4.363c-3.32-12.806-8.596-23.888-15.814-33.08C147.743 10.424 125.813.17 96.27 0h-.46C66.267.17 44.672 10.489 30.538 30.676 17.899 48.81 11.364 74.211 11.12 96v.56c.244 21.789 6.779 47.19 19.418 65.324C44.672 181.511 66.267 191.83 95.81 192h.46c26.537-.165 45.254-7.13 60.67-22.48 20.209-20.1 19.612-45.316 12.96-60.732-4.854-11.318-14.162-20.553-28.363-25.8z"/></svg>
+          Threadsでシェア
+        </a>
+      </div>
+      <button class="btn-retry" onclick="resetQuiz()">もう一度診断する</button>
+    </div>
+  </div>
+
+  <!-- 診断Lab フッター -->
+  <footer class="site-footer">
+    <div class="footer-logo-wrap">
+      <svg width="26" height="26" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M9,2 H15 L15,9 L22,20 A2,2 0 0 1 20,23 H4 A2,2 0 0 1 2,20 L9,9 Z" fill="#C1714A"/>
+        <rect x="7.5" y="1" width="9" height="2" rx="1" fill="#A85D38"/>
+        <path d="M12,21 C10,19 8,17 8,14 A2,2 0 0 1 12,14 A2,2 0 0 1 16,14 C16,17 14,19 12,21 Z" fill="white"/>
+      </svg>
+      <span class="footer-brand-name">診断<em>Lab</em></span>
+    </div>
+    <p class="footer-tagline">あなたの「なんか」を、言葉にする。</p>
+    <p class="footer-copy">© 2026 診断Lab</p>
+  </footer>
+
+</div>
+<script src="affiliate.js"></script>
+<script>
+// ===== タイプ別カラー =====
+const typeColors = {
+  A: { gradient: 'linear-gradient(135deg, #6D28D9 0%, #8B5CF6 100%)' },
+  B: { gradient: 'linear-gradient(135deg, #1E40AF 0%, #60A5FA 100%)' },
+  C: { gradient: 'linear-gradient(135deg, #D97706 0%, #FBBF24 100%)' },
+  D: { gradient: 'linear-gradient(135deg, #DB2777 0%, #F472B6 100%)' },
+  E: { gradient: 'linear-gradient(135deg, #0891B2 0%, #22D3EE 100%)' },
+  F: { gradient: 'linear-gradient(135deg, #DC2626 0%, #F87171 100%)' },
+  G: { gradient: 'linear-gradient(135deg, #059669 0%, #34D399 100%)' },
+  H: { gradient: 'linear-gradient(135deg, #4B5563 0%, #9CA3AF 100%)' },
+  I: { gradient: 'linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%)' },
+  J: { gradient: 'linear-gradient(135deg, #EA580C 0%, #FB923C 100%)' },
+};
+
+// ===== タイプ別SVGアイコン =====
+const typeIcons = {
+  // A: 諦め / 小さく閉じた吹き出し
+  A: `<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="8" y="10" width="30" height="22" rx="6" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" fill="rgba(255,255,255,0.18)"/>
+    <path d="M8 32l-4 8 7-4" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M16 46l24-2" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M14 20l12 0M14 27l8 0" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M42 22l6-4M42 28l6 2" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+  // B: 我慢 / 抱える手
+  B: `<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 28c0-8 4-14 14-14s14 6 14 14c0 10-14 20-14 20S14 38 14 28z" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" fill="rgba(255,255,255,0.18)" stroke-linejoin="round"/>
+    <path d="M22 26c0-3 3-5 6-5s6 2 6 5" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M24 32h8" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
+  </svg>`,
+  // C: 軽く言う / 小さな吹き出しと笑顔
+  C: `<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="28" cy="24" r="14" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" fill="rgba(255,255,255,0.18)"/>
+    <path d="M22 26c1 3 3 5 6 5s5-2 6-5" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="23" cy="22" r="2" fill="rgba(255,255,255,0.9)"/>
+    <circle cx="33" cy="22" r="2" fill="rgba(255,255,255,0.9)"/>
+    <rect x="34" y="36" width="16" height="10" rx="4" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" fill="rgba(255,255,255,0.1)"/>
+    <path d="M34 46l-3 4 4-2" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M37 40h8M37 43h5" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+  // D: 察してほしい / 目線・小さな心
+  D: `<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 24c6-10 12-14 18-14s12 4 18 14c-6 10-12 14-18 14S16 34 10 24z" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" fill="rgba(255,255,255,0.15)" stroke-linejoin="round"/>
+    <circle cx="28" cy="24" r="5" fill="rgba(255,255,255,0.9)"/>
+    <path d="M28 38s-5 5-5 9a5 5 0 0 0 10 0c0-4-5-9-5-9z" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" fill="rgba(255,255,255,0.18)" stroke-linejoin="round"/>
+  </svg>`,
+  // E: 涙 / しずく
+  E: `<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M28 6c0 0-14 16-14 26a14 14 0 0 0 28 0C42 22 28 6 28 6z" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" fill="rgba(255,255,255,0.18)" stroke-linejoin="round"/>
+    <path d="M22 36a8 8 0 0 0 6 5" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round"/>
+  </svg>`,
+  // F: 強く出る / 震える吹き出し
+  F: `<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7 10c1-2 3-3 5-3h28c2 0 4 1 5 3l2 16c0 2-1 4-3 5l-6 3-5 10-5-10H12c-2-1-3-3-3-5L7 10z" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" fill="rgba(255,255,255,0.18)" stroke-linejoin="round"/>
+    <path d="M16 19h24M16 26h16" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round"/>
+  </svg>`,
+  // G: 元気そう / 仮面・明るい顔
+  G: `<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="28" cy="24" r="16" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" fill="rgba(255,255,255,0.18)"/>
+    <path d="M20 28c2 4 5 6 8 6s6-2 8-6" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="22" cy="22" r="2.5" fill="rgba(255,255,255,0.9)"/>
+    <circle cx="34" cy="22" r="2.5" fill="rgba(255,255,255,0.9)"/>
+    <path d="M18 40l-4 8M38 40l4 8" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+  // H: 平気な顔 / まっすぐな顔と影
+  H: `<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="28" cy="22" r="14" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" fill="rgba(255,255,255,0.18)"/>
+    <path d="M21 26h14" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="23" cy="20" r="2" fill="rgba(255,255,255,0.9)"/>
+    <circle cx="33" cy="20" r="2" fill="rgba(255,255,255,0.9)"/>
+    <path d="M14 38c0-4 6-8 14-8s14 4 14 8" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M10 42h36" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+  // I: まとまらない / 散らばるメモ
+  I: `<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="6" y="10" width="18" height="14" rx="3" stroke="rgba(255,255,255,0.9)" stroke-width="2" fill="rgba(255,255,255,0.18)" transform="rotate(-8 6 10)"/>
+    <rect x="30" y="8" width="18" height="14" rx="3" stroke="rgba(255,255,255,0.9)" stroke-width="2" fill="rgba(255,255,255,0.18)" transform="rotate(6 30 8)"/>
+    <rect x="16" y="30" width="22" height="14" rx="3" stroke="rgba(255,255,255,0.9)" stroke-width="2" fill="rgba(255,255,255,0.18)" transform="rotate(-3 16 30)"/>
+    <path d="M10 15h8M10 19h5" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M20 35h14M20 39h10" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+  // J: 空振り / ずれた吹き出し
+  J: `<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="6" y="8" width="26" height="18" rx="5" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" fill="rgba(255,255,255,0.18)"/>
+    <path d="M6 26l-2 8 7-4" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M10 16h16M10 21h10" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round"/>
+    <rect x="24" y="30" width="26" height="16" rx="5" stroke="rgba(255,255,255,0.7)" stroke-width="2" fill="rgba(255,255,255,0.1)"/>
+    <path d="M50 46l2 6-6-3" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M28 37h16M28 42h10" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+};
+
+// ===== 設問データ =====
+const questions = [
+  {
+    id: 1,
+    text: "疲れているとき、いちばん最初に出やすい反応は？",
+    options: [
+      { text: "言う前から、どうせ伝わらないと思う", scores: { A: 3 } },
+      { text: "とりあえず自分で抱えてしまう", scores: { B: 3 } },
+      { text: "軽く『疲れた〜』とは言う", scores: { C: 3 } },
+      { text: "そこまで強い癖はない", scores: {} }
+    ]
+  },
+  {
+    id: 2,
+    text: "近い人にしんどさをわかってほしいとき、気持ちに近いのは？",
+    options: [
+      { text: "言わなくても少しくらい気づいてほしい", scores: { D: 3 } },
+      { text: "話そうとすると涙が出そうになる", scores: { E: 3 } },
+      { text: "言うと責めてる感じになりそうで怖い", scores: { F: 3 } },
+      { text: "そこまで強くは感じない", scores: {} }
+    ]
+  },
+  {
+    id: 3,
+    text: "周りからの見え方で近いのは？",
+    options: [
+      { text: "意外と元気そうに見られやすい", scores: { G: 3 } },
+      { text: "限界近くまで平気そうにしてしまう", scores: { H: 3 } },
+      { text: "何がしんどいか、自分でもまとまりにくい", scores: { I: 3 } },
+      { text: "そこはあまり当てはまらない", scores: {} }
+    ]
+  },
+  {
+    id: 4,
+    text: "勇気を出して伝えた後に起きやすいことは？",
+    options: [
+      { text: "思ったより軽く受け取られてしまう", scores: { J: 3 } },
+      { text: "やっぱり言わなきゃよかったと思う", scores: { A: 2, B: 1 } },
+      { text: "本気度がうまく伝わっていない気がする", scores: { C: 2, G: 1 } },
+      { text: "そこまで困ることは少ない", scores: {} }
+    ]
+  },
+  {
+    id: 5,
+    text: "パートナーや家族に疲れを伝える前の気持ちに近いのは？",
+    options: [
+      { text: "説明するのがもう面倒に感じる", scores: { A: 3 } },
+      { text: "言う前に『私がやればいいか』となる", scores: { B: 3 } },
+      { text: "冗談っぽくなら言える", scores: { C: 3 } },
+      { text: "そこまで迷わず言える", scores: {} }
+    ]
+  },
+  {
+    id: 6,
+    text: "『なんで気づいてくれないの』と思いやすいのはどんなとき？",
+    options: [
+      { text: "何も言ってないけど、見ればわかると思うとき", scores: { D: 3 } },
+      { text: "話そうとしたのに、うまく言葉が出なかったとき", scores: { E: 2, I: 1 } },
+      { text: "強く言ってしまって空気が悪くなったとき", scores: { F: 3 } },
+      { text: "そこまで強く思うことは少ない", scores: {} }
+    ]
+  },
+  {
+    id: 7,
+    text: "しんどいのに『大丈夫そう』に見られやすい理由として近いのは？",
+    options: [
+      { text: "普通に受け答えできてしまうから", scores: { G: 3 } },
+      { text: "かなりギリギリまで顔に出さないから", scores: { H: 3 } },
+      { text: "自分でも何がつらいかうまく言えないから", scores: { I: 3 } },
+      { text: "特に思い当たらない", scores: {} }
+    ]
+  },
+  {
+    id: 8,
+    text: "疲れを伝えたとき、返ってくるとしんどい言葉に近いのは？",
+    options: [
+      { text: "『気にしすぎじゃない？』", scores: { J: 3 } },
+      { text: "『言ってくれないとわからないよ』", scores: { D: 2, A: 1 } },
+      { text: "『そんな言い方しなくても…』", scores: { F: 3 } },
+      { text: "そこまで刺さる言葉は少ない", scores: {} }
+    ]
+  },
+  {
+    id: 9,
+    text: "自分の疲れを表に出すタイミングは？",
+    options: [
+      { text: "かなり後になってから", scores: { H: 3 } },
+      { text: "軽めには早く出すけど、本気では出しにくい", scores: { C: 3 } },
+      { text: "うまくまとまったら言おうとして遅れる", scores: { I: 3 } },
+      { text: "比較的その都度出せる", scores: {} }
+    ]
+  },
+  {
+    id: 10,
+    text: "誰かに頼りたいとき、一番近い感覚は？",
+    options: [
+      { text: "頼る前にもう疲れてしまう", scores: { A: 2, B: 1 } },
+      { text: "本当は察して動いてほしい", scores: { D: 3 } },
+      { text: "頼る言葉が感情っぽくなりやすい", scores: { E: 1, F: 2 } },
+      { text: "そこまで困らない", scores: {} }
+    ]
+  },
+  {
+    id: 11,
+    text: "いざ本音を話そうとしたときに起きやすいのは？",
+    options: [
+      { text: "やっぱりやめよう、となる", scores: { A: 3 } },
+      { text: "『私が頑張ればいいか』で終わる", scores: { B: 3 } },
+      { text: "軽い言い方に変えてしまう", scores: { C: 3 } },
+      { text: "比較的そのまま話せる", scores: {} }
+    ]
+  },
+  {
+    id: 12,
+    text: "近い人とのすれ違いで、一番近いものは？",
+    options: [
+      { text: "察してほしいのに気づかれない", scores: { D: 3 } },
+      { text: "話そうとすると涙が先に出る", scores: { E: 3 } },
+      { text: "助けてほしいのに怒ってるようになる", scores: { F: 3 } },
+      { text: "そこまで大きなすれ違いは少ない", scores: {} }
+    ]
+  },
+  {
+    id: 13,
+    text: "周りから見た自分に近いのは？",
+    options: [
+      { text: "ちゃんとしていそう", scores: { G: 3 } },
+      { text: "まだ平気そう", scores: { H: 3 } },
+      { text: "何を考えてるかわかりにくい", scores: { I: 2 } },
+      { text: "特に思い当たらない", scores: {} }
+    ]
+  },
+  {
+    id: 14,
+    text: "『伝えたのにわかってもらえなかった』と感じやすいのは？",
+    options: [
+      { text: "軽く受け流されたとき", scores: { J: 3 } },
+      { text: "大したことないと思われたとき", scores: { C: 2, G: 1 } },
+      { text: "話のズレたアドバイスが返ってきたとき", scores: { J: 2, I: 1 } },
+      { text: "そこまで感じにくい", scores: {} }
+    ]
+  },
+  {
+    id: 15,
+    text: "疲れを言葉にしづらい理由として近いのは？",
+    options: [
+      { text: "どうせ伝わらない気がするから", scores: { A: 3 } },
+      { text: "自分で飲み込む方が早いから", scores: { B: 3 } },
+      { text: "本気の温度で言うのが苦手だから", scores: { C: 2, E: 1 } },
+      { text: "特に思い当たらない", scores: {} }
+    ]
+  },
+  {
+    id: 16,
+    text: "言わなくてもわかってほしい気持ちが強くなるのは？",
+    options: [
+      { text: "何度も同じ説明をしたくないとき", scores: { D: 3 } },
+      { text: "言うと自分が崩れそうなとき", scores: { E: 2, A: 1 } },
+      { text: "言うと強くなりそうで怖いとき", scores: { F: 3 } },
+      { text: "そこまでは感じない", scores: {} }
+    ]
+  },
+  {
+    id: 17,
+    text: "疲れが見えにくい自分に近いのは？",
+    options: [
+      { text: "元気そうにふるまえてしまう", scores: { G: 3 } },
+      { text: "かなりギリギリまで出さない", scores: { H: 3 } },
+      { text: "整理できていないから出しにくい", scores: { I: 3 } },
+      { text: "そこまで当てはまらない", scores: {} }
+    ]
+  },
+  {
+    id: 18,
+    text: "勇気を出して伝えたあと、傷つきやすいのはどんなとき？",
+    options: [
+      { text: "話を軽く変えられたとき", scores: { J: 3 } },
+      { text: "『そんなに？』という反応をされたとき", scores: { C: 2, G: 1 } },
+      { text: "『言い方きついよ』と言われたとき", scores: { F: 3 } },
+      { text: "そこまで傷つくことは少ない", scores: {} }
+    ]
+  },
+  {
+    id: 19,
+    text: "しんどいとき、自分の中で起きやすい流れは？",
+    options: [
+      { text: "言う前に諦める", scores: { A: 3 } },
+      { text: "我慢して抱える", scores: { B: 3 } },
+      { text: "何がつらいか整理しようとして止まる", scores: { I: 3 } },
+      { text: "そこまで固定の流れはない", scores: {} }
+    ]
+  },
+  {
+    id: 20,
+    text: "もし明日、疲れを少しだけ伝えるなら一番近い出し方は？",
+    options: [
+      { text: "短く事実だけ言う", scores: { A: 1, B: 1, I: 1 } },
+      { text: "本当は察してほしい気持ちがある", scores: { D: 3 } },
+      { text: "軽めに言って様子を見る", scores: { C: 3 } },
+      { text: "言ってもズレそうで少し怖い", scores: { J: 3 } }
+    ]
+  }
+];
+
+// ===== タイプ定義 =====
+const types = {
+  A: {
+    name: "説明する前に諦めるタイプ",
+    headline: "あなたの疲れが伝わりにくい理由は、『どうせわかってもらえない』が先に来やすいことです",
+    body: "本当はしんどい。ちゃんとわかってほしい。そう思っていても、いざ言葉にしようとすると『どうせ伝わらない』『説明する方が疲れる』が先に来てしまう。あなたは、伝える前に自分で引っ込めてしまいやすいタイプです。\n\nそれは諦めっぽいからではありません。これまでに、うまく伝わらなかった経験が積み重なっているからです。言う前から心が少し身構えてしまうのは、そのぶんちゃんとわかってほしかった証拠でもあります。",
+    letter: "本当は、何度も言おうとしてきたんですよね。でもそのたびに、説明するしんどさの方が大きくなってしまった。それはあなたが弱いからではなく、ずっと頑張ってきたからです。",
+    prescription: "全部を説明しようとしなくて大丈夫です。まずは『今日はちょっと余裕がない』のように、事実だけを一言出す練習から始めてみてください。長い説明より、短い入口の方が伝わることがあります。"
+  },
+  B: {
+    name: "我慢が先に出るタイプ",
+    headline: "あなたの疲れが伝わりにくい理由は、『言う前に自分で抱えてしまう』ことです",
+    body: "しんどいときほど、『でも私がやればいいか』『ここで言うほどでもないか』と飲み込んでしまう。助けてほしい気持ちがないわけではないのに、先に我慢が出てきやすい。あなたは、そういう抱え方をしやすいタイプです。\n\nこのタイプは、強いから我慢しているのではなく、周りを止めたくない気持ちや、説明の手間を増やしたくない気持ちが先に働いています。だから限界まで見えにくく、自分でも『こんなに溜まっていたんだ』と後から気づきやすいんです。",
+    letter: "頑張れば回る、を何度も選んできたんですよね。でも、本当はずっと少しずつしんどかったはずです。我慢できることと、我慢していいことは同じではありません。",
+    prescription: "今日は一回だけ、『手伝ってほしい』ではなく『今ちょっとしんどい』と状態だけ伝えてみてください。我慢を減らす最初の一歩は、お願いより先に状態を見せることです。"
+  },
+  C: {
+    name: "軽く言ってしまうタイプ",
+    headline: "あなたの疲れが伝わりにくい理由は、『本気のしんどさを軽めの言葉で包みやすい』ことです",
+    body: "本当はかなり疲れているのに、『ちょっとしんどい』『まあまあ疲れた』くらいで済ませてしまう。冗談っぽく言ったり、笑って流したりして、深刻さを自分で薄めてしまう。あなたは、そういう出し方をしやすいタイプです。\n\n軽く言うのは、癖でもあり優しさでもあります。重くしたくない、相手を困らせたくない、その気持ちがあるからです。でも、言葉が軽いと、受け取る側も軽く受け取りやすい。ちゃんとしんどいのに、ちゃんと伝わりきらないのはそのせいかもしれません。",
+    letter: "やわらかく言ってきたのは、場を重くしたくなかったからなんですよね。気を遣ってきたからこそ、しんどさの強さが見えにくくなってしまっただけです。",
+    prescription: "次に疲れを伝えるときは、『ちょっと』を一度だけ外してみてください。言い方を少しだけ事実に近づけるだけで、受け取られ方はかなり変わります。"
+  },
+  D: {
+    name: "察してほしいタイプ",
+    headline: "あなたの疲れが伝わりにくい理由は、『言わなくても気づいてほしい』気持ちが強くなりやすいことです",
+    body: "言えばいいと頭ではわかっている。でも、本当に近い人には、言わなくても少しくらい気づいてほしい。そんな気持ちがどこかにあって、うまく言葉にしないまますれ違ってしまう。あなたは、そういう疲れ方をしやすいタイプです。\n\nこれは甘えではありません。近い関係だからこそ、説明し続けることに疲れてしまうんです。ちゃんと見ていてほしい、少しは想像してほしい。その気持ちはすごく自然です。ただ、察してほしい気持ちが強いほど、気づかれなかったときの傷つき方も大きくなります。",
+    letter: "本当は責めたいわけじゃないんですよね。ただ、少しでいいから気づいてほしかった。その願いが何度も空振りしてきたから、余計にしんどかったんだと思います。",
+    prescription: "全部を説明しなくていいので、『今は察してほしいより、少しだけ助けてほしい』と短く伝えてみてください。察してもらう期待を、少しだけ言葉に置き換えると伝わりやすくなります。"
+  },
+  E: {
+    name: "言葉にすると涙が出るタイプ",
+    headline: "あなたの疲れが伝わりにくい理由は、『話そうとすると感情が先にあふれやすい』ことです",
+    body: "いざ話そうとすると、うまく言葉が出ない。説明したいのに、涙が先に出る。感情が大きくなって、自分でも何から話せばいいかわからなくなる。あなたは、そういう出方をしやすいタイプです。\n\nこれは気持ちが整理できていないからではなく、ずっと抑えてきたものが、言葉の出口に来た瞬間に一気にあふれるからです。ちゃんと話せないことを責めなくて大丈夫です。その涙自体が、しんどさの大きさを表しています。",
+    letter: "話そうとした時点で、もう十分頑張っていたんですよね。泣きたかったわけじゃなくて、やっと外に出せるところまで来ただけなんです。",
+    prescription: "話す前に、箇条書きで3つだけメモしてみてください。『疲れている』『余裕がない』『少し休みたい』のような短い言葉で十分です。言葉の骨組みがあるだけで、感情に飲まれにくくなります。"
+  },
+  F: {
+    name: "責めてる感じになるタイプ",
+    headline: "あなたの疲れが伝わりにくい理由は、『助けてほしい気持ちが強さのある言葉で出やすい』ことです",
+    body: "本当は責めたいわけじゃない。ただ、限界が近いときほど言い方が強くなってしまう。助けてほしいだけなのに、相手には不満や攻撃のように届きやすい。あなたは、そういうすれ違いが起きやすいタイプです。\n\nこれは性格がきついからではありません。もう余白がない状態で、やっと言葉を出しているからです。余裕が残っているうちに言えなかったぶん、出る頃にはどうしても温度が高くなりやすいんです。",
+    letter: "本当は、『なんでわかってくれないの』より『もう少し助けてほしい』だったんですよね。言い方より先に、そこにあった本音を大事にしていいです。",
+    prescription: "次に伝えるときは、最初の一言を『責め』ではなく『状態』から始めてみてください。たとえば『今かなり余裕がない』だけでも、受け取られ方が少し変わります。"
+  },
+  G: {
+    name: "元気に見えてしまうタイプ",
+    headline: "あなたの疲れが伝わりにくい理由は、『外からは大丈夫そうに見えやすい』ことです",
+    body: "ちゃんとして見える。動けているように見える。笑えてしまうし、受け答えもできる。だから周りからは『まだ大丈夫そう』に見られやすい。あなたは、疲れていても崩れ方が外に出にくいタイプです。\n\nこれは無理に取り繕っているというより、そう見えてしまう出方なんです。しんどいのに心配されにくい、気づかれにくい。だからこそ、自分から少し見せないと、なかなか伝わりにくくなります。",
+    letter: "ちゃんとして見える人ほど、しんどさを見落とされやすいんですよね。『できているように見える』ことと『平気』は、まったく同じではありません。",
+    prescription: "元気に振る舞う前に、一度だけ『今日はちょっとしんどい』を先に置いてみてください。先に状態を見せるだけで、周囲の受け取り方が変わることがあります。"
+  },
+  H: {
+    name: "限界まで平気な顔をするタイプ",
+    headline: "あなたの疲れが伝わりにくい理由は、『かなりしんどくなるまで外に出しにくい』ことです",
+    body: "まだいける。もう少しなら大丈夫。そうやって平気な顔のまま持ちこたえて、かなり限界に近づいてから一気に崩れる。あなたは、疲れを外に出すタイミングがかなり遅くなりやすいタイプです。\n\nこのタイプは、しんどさがないのではなく、自分で認めるのも人に見せるのも後回しにしやすいんです。だから周りからすると『急に崩れた』ように見えやすい。でも実際は、急ではなく、かなり前から積み重なっていたんです。",
+    letter: "限界まで頑張れてしまう人ほど、周りにも自分にも気づかれにくいんですよね。平気な顔をしてきたぶん、ちゃんとしんどかったことを自分で認めてあげてください。",
+    prescription: "今日は一度だけ、疲れを10点満点で数字にしてみてください。限界になる前に小さく見える化するだけでも、出し方は少し変わります。"
+  },
+  I: {
+    name: "言葉がまとまらないタイプ",
+    headline: "あなたの疲れが伝わりにくい理由は、『何がつらいのか自分の中で整理しきれない』ことです",
+    body: "疲れているのは確か。でも、何が一番つらいのか、どこから話せばいいのか、うまくまとまらない。頭の中が散らかったままで、伝える前に止まってしまう。あなたは、そういう詰まり方をしやすいタイプです。\n\nこれは考えが浅いからではありません。むしろいろんなことを同時に抱えているから、一言にしにくいんです。しんどさが複数重なっていると、本人にとっても輪郭が見えにくくなります。",
+    letter: "言葉にならないから軽い、ではないんですよね。まとまらないくらい、いろんなものを抱えていたということです。その混線自体が、もう十分しんどさです。",
+    prescription: "まずは『疲れてる理由』ではなく、『今しんどいことを単語で3つ』だけ書き出してみてください。整理してから伝えるのではなく、出しながら整える方が合うタイプです。"
+  },
+  J: {
+    name: "伝えても空振りしやすいタイプ",
+    headline: "あなたの疲れが伝わりにくい理由は、『勇気を出して伝えても、受け止められ方がズレやすい』ことです",
+    body: "やっと言えたのに、返ってきたのは励ましすぎる言葉だったり、軽い受け取りだったり、ズレた解決策だったりする。そんな"空振り"が続くと、次第に言うこと自体がしんどくなります。あなたは、そういう傷つき方をしやすいタイプです。\n\nこのタイプは、伝え方だけの問題ではありません。相手との温度差や受け取る力の差も大きく関係します。だから『伝えたのにダメだった』経験が、次の沈黙につながりやすいんです。",
+    letter: "せっかく出した言葉が、ちゃんと届かなかったらしんどいですよね。それでも伝えようとしてきたこと自体が、もう十分すごいことです。",
+    prescription: "次に伝えるときは、『聞いてほしいだけなのか』『手伝ってほしいのか』を先に一言添えてみてください。受け取り方のズレを少し減らせることがあります。"
+  }
+};
+
+// ===== 状態管理 =====
+let currentQuestion = 0;
+let answers = [];
+let isAnswering = false;
+
+// ===== スコア計算 =====
+function calcResult(answerList) {
+  const scores = { A:0, B:0, C:0, D:0, E:0, F:0, G:0, H:0, I:0, J:0 };
+  answerList.forEach(function(ans) {
+    Object.entries(ans.scores).forEach(function([type, pt]) { scores[type] += pt; });
+  });
+  const sorted = Object.entries(scores).sort(function(a, b) { return b[1] - a[1]; });
+  return { main: sorted[0][0], sub: sorted[1][0] };
+}
+
+// ===== シェアテキスト =====
+function getShareText(mainType) {
+  const url = 'https://shindan-lab.github.io/tsutawaranai-tsukare/';
+  return '私の"伝わらない疲れ"は「' + types[mainType].name + '」でした。\nちゃんとしんどいのに、うまく伝わらない理由が少しわかったかも。\n\n▼伝わらない疲れ診断\n' + url + '\n\n#伝わらない疲れ診断 #診断Lab';
+}
+
+// ===== 画面切り替え =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+// ===== 問題表示 =====
+function renderQuestion(index) {
+  var q = questions[index];
+  var total = questions.length;
+
+  document.getElementById('progress-text').textContent = (index + 1) + ' / ' + total;
+  document.getElementById('progress-bar').style.width = (((index + 1) / total) * 100) + '%';
+  document.getElementById('question-text').textContent = q.text;
+
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt, i) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt.text;
+    btn.addEventListener('click', function() { selectOption(i); });
+    list.appendChild(btn);
+  });
+
+  document.getElementById('btn-back').disabled = (index === 0);
+
+  var card = document.getElementById('question-card');
+  card.classList.remove('fade-in');
+  void card.offsetWidth;
+  card.classList.add('fade-in');
+}
+
+// ===== 選択肢タップ =====
+function selectOption(optionIndex) {
+  if (isAnswering) return;
+  isAnswering = true;
+
+  var buttons = document.querySelectorAll('.option-btn');
+  buttons.forEach(function(btn) { btn.disabled = true; });
+  buttons[optionIndex].classList.add('selected');
+  document.getElementById('btn-back').disabled = true;
+
+  answers.push(questions[currentQuestion].options[optionIndex]);
+
+  setTimeout(function() {
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+      renderQuestion(currentQuestion);
+      isAnswering = false;
+    } else {
+      showLoading();
+    }
+  }, 300);
+}
+
+// ===== 前の問題に戻る =====
+function goBack() {
+  if (currentQuestion === 0 || isAnswering) return;
+  currentQuestion--;
+  answers.pop();
+  isAnswering = false;
+  renderQuestion(currentQuestion);
+}
+
+// ===== ローディング =====
+function showLoading() {
+  showScreen('screen-loading');
+  setTimeout(showResult, 1500);
+}
+
+if (typeof affiliateData === 'undefined') {
+  var affiliateData = {};
+}
+
+// ===== 結果表示 =====
+function showResult() {
+  var result = calcResult(answers);
+  var mainType = types[result.main];
+  var subType  = types[result.sub];
+
+  var headerCard = document.getElementById('result-header-card');
+  headerCard.style.background = typeColors[result.main].gradient;
+  document.getElementById('result-bg-letter').textContent = result.main;
+  document.getElementById('result-icon').innerHTML = typeIcons[result.main];
+  document.getElementById('result-type-name').textContent = mainType.name;
+
+  document.getElementById('result-headline').textContent = mainType.headline;
+  var bodyEl = document.getElementById('result-body');
+  bodyEl.innerHTML = mainType.body.split('\n\n').map(function(p) { return '<p>' + p + '</p>'; }).join('');
+  document.getElementById('result-letter').textContent = mainType.letter;
+  document.getElementById('result-prescription').textContent = mainType.prescription;
+
+  document.getElementById('result-sub-type').textContent = '今のあなたには「' + subType.name + '」の傾向も少しあります。';
+
+  var affiliate = affiliateData[result.main];
+  var affSection = document.getElementById('result-affiliate');
+  if (affiliate && affiliate.url) {
+    document.getElementById('affiliate-title').textContent = affiliate.title;
+    document.getElementById('affiliate-desc').textContent = affiliate.desc;
+    document.getElementById('affiliate-link').href = affiliate.url;
+    affSection.style.display = 'block';
+  } else {
+    affSection.style.display = 'none';
+  }
+
+  var shareText = getShareText(result.main);
+  document.getElementById('share-x').href =
+    'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText);
+  document.getElementById('share-threads').href =
+    'https://www.threads.net/intent/post?text=' + encodeURIComponent(shareText);
+
+  showScreen('screen-result');
+}
+
+// ===== 診断スタート =====
+function startQuiz() {
+  currentQuestion = 0;
+  answers = [];
+  isAnswering = false;
+  showScreen('screen-quiz');
+  renderQuestion(0);
+}
+
+// ===== リセット =====
+function resetQuiz() {
+  showScreen('screen-top');
+}
+</script>
+</body>
+</html>
